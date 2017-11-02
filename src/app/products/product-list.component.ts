@@ -14,6 +14,8 @@ export class ProductListComponent implements OnInit {
     imageMargin: number = 2;
     showImage: boolean = false;
     listFilter: string = 'cart';
+    errorMessage: string;
+    
     products: IProduct[];
 
     constructor(private _productService: ProductService){} // injection of service into the component
@@ -21,8 +23,12 @@ export class ProductListComponent implements OnInit {
     toggleImage(): void {
         this.showImage = !this.showImage;
     }
+    
+    // gets data from api
     ngOnInit(): void {
-        this.products = this._productService.getProducts();
+        this._productService.getProducts()
+            .subscribe(products => this.products = products,
+                 error => this.errorMessage = <any>error);        
     }
 
     onRatingClicked(message: string): void{
